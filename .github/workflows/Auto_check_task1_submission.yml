@@ -1,9 +1,11 @@
-name: Check Task 1
+name: Auto check task 1 submission
 
 on:
   pull_request:
     branches:
       - main
+
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -11,6 +13,7 @@ permissions:
   issues: write
 
 jobs:
+  OUTFILE_PATH: "/.github/temp/log.txt"
   check_and_merge:
     runs-on: ubuntu-latest
     steps:
@@ -28,25 +31,22 @@ jobs:
       - name: Run check script
         id: check
         run: |
-          STUDENT_ID=$(basename ${{ github.event.pull_request.head.ref }})
-          echo "STUDENT_ID=$STUDENT_ID"
           if [ ! -f "scripts/task1_flow.py" ]; then
-            echo "檢查腳本未找到，請確保 repository 包含 scripts/task1_flow.py" > check_output.txt
+            echo "檢查腳本未找到，請確保 repository 同步至最新版本" > OUTFILE_PATH
             echo "FAILED=true" >> $GITHUB_ENV
+            exit 1
           else
-            python scripts/task1_flow.py "$STUDENT_ID" > check_output.txt 2>&1
+            python scripts/task1_flow.py "$STUDENT_ID" > OUTFILE_PATH 2>&1
             EXIT_CODE=$?
+            echo "PYTHON_EXIT_CODE=$EXIT_CODE"
             if [ $EXIT_CODE -ne 0 ]; then
               echo "FAILED=true" >> $GITHUB_ENV
+              exit 1
+            else
+              echo "FAILED=false" >> $GITHUB_ENV
+              exit 0
             fi
           fi
-          cat check_output.txt
-          echo "CHECK_OUTPUT=$(cat check_output.txt)" >> $GITHUB_ENV
-
-      - name: Debug output
-        run: |
-          echo "FAILED=$FAILED"
-          echo "CHECK_OUTPUT=$CHECK_OUTPUT"
 
       - name: Auto Merge PR
         if: ${{ env.FAILED != 'true' }}
@@ -69,10 +69,9 @@ jobs:
             });
             const hasCommented = comments.data.some(comment => comment.body.includes('提交檢查未通過'));
             if (!hasCommented) {
-              const output = process.env.CHECK_OUTPUT || "無詳細錯誤訊息";
+              const output = require('fs').readFileSync('OUTFILE_PATH', 'utf8') || "無詳細錯誤訊息";
               const comment = `
                 ## 提交檢查未通過
-                以下是問題：
                 \`\`\`
                 ${output}
                 \`\`\`
