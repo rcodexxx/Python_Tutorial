@@ -31,17 +31,21 @@ jobs:
           STUDENT_ID=$(basename ${{ github.event.pull_request.head.ref }})
           echo "STUDENT_ID=$STUDENT_ID"
           if [ ! -f "scripts/task1_flow.py" ]; then
-            echo "檢查腳本未找到，請確保 repository 包含 scripts/task1_flow.py" > check_output.txt
+            echo "檢查腳本未找到，請確保 repository 同步至最新版本" > check_output.txt
             echo "FAILED=true" >> $GITHUB_ENV
           else
             python scripts/task1_flow.py "$STUDENT_ID" > check_output.txt 2>&1
             EXIT_CODE=$?
+            echo "PYTHON_EXIT_CODE=$EXIT_CODE"
             if [ $EXIT_CODE -ne 0 ]; then
               echo "FAILED=true" >> $GITHUB_ENV
+            else
+              echo "FAILED=false" >> $GITHUB_ENV
             fi
           fi
           cat check_output.txt
           echo "CHECK_OUTPUT=$(cat check_output.txt)" >> $GITHUB_ENV
+          exit 0
 
       - name: Debug output
         run: |
