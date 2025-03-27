@@ -49,6 +49,8 @@ def check_folder(student_id) -> tuple[bool, list]:
             if not re.search(github_pattern, content):
                 error_list.append(f"錯誤：{md_file_path} 中的圖片不正確，應為 ![](./images/...)")
 
+
+
     # 如果沒有錯誤，則成功
     success = len(error_list) == 0
     if success:
