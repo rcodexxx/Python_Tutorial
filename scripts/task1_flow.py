@@ -51,8 +51,6 @@ def check_folder(student_id) -> tuple[bool, list]:
 
     # 如果沒有錯誤，則成功
     success = len(error_list) == 0
-    if success:
-        print(f"{student_id} 符合")
     return success, error_list
 
 if __name__ == "__main__":

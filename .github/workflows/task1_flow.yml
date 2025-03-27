@@ -43,19 +43,6 @@ jobs:
           cat check_output.txt
           echo "CHECK_OUTPUT=$(cat check_output.txt)" >> $GITHUB_ENV
 
-      - name: Debug output
-        run: |
-          echo "FAILED=$FAILED"
-          echo "CHECK_OUTPUT=$CHECK_OUTPUT"
-
-      - name: Auto Merge PR
-        if: ${{ env.FAILED != 'true' }}
-        uses: peter-evans/enable-pull-request-automerge@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          pull-request-number: ${{ github.event.pull_request.number }}
-          merge-method: squash
-
       - name: Comment on PR
         if: ${{ env.FAILED == 'true' }}
         uses: actions/github-script@v6.4.1
