@@ -1,0 +1,33 @@
+name: Check PR Conflicts
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  check_conflicts:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install GitHub CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gh
+
+      - name: Authenticate GitHub CLI
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+
+      - name: Check PR mergeable state
+        id: pr_status
+        run: |
+          pr_status=$(gh pr view ${{ github.event.pull_request.number }} --json mergeable --jq '.mergeable')
+          echo "PR mergeable state: $pr_status"
+          if [ "$pr_status" == "CONFLICTING" ]; then
+            echo "conflict=true" >> $GITHUB_ENV
+          else
+            echo "conflict=false" >> $GITHUB_ENV
+          fi
+
+      - name: Comment on PR if conflict
+        if: env.conflict == 'true'
+        run: |
+          gh pr comment ${{ github.event.pull_request.number }} --body "請同步主分支，解決合併衝突後重新提交 PR。"
