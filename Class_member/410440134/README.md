@@ -1,8 +1,8 @@
-#  °ò¥»¸ê®Æ 
+#  åŸºæœ¬è³‡æ–™ 
 
-    ©m¦W:±i®¦ºÍ
-    ¾Ç¸¹:410440134
-    GitHub ±b¸¹**: [https://github.com/ryan10355055/Python_Tutorial](https://github.com/ryan10355055)
+    å§“å:å¼µæ©ç¿
+    å­¸è™Ÿ:410440134
+    GitHub å¸³è™Ÿ: [https://github.com/ryan10355055/Python_Tutorial](https://github.com/ryan10355055)
 
-##  GitHub ±b¸¹
+##  GitHub å¸³è™Ÿ
 ![](./images/github_profile.png)
