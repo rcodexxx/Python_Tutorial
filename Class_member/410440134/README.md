@@ -5,4 +5,4 @@
     GitHub 帳號: [https://github.com/ryan10355055/Python_Tutorial](https://github.com/ryan10355055)
 
 ##  GitHub 帳號
-![](./images/github_profile.png)
+![](./images/...)
