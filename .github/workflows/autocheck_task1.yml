@@ -14,11 +14,9 @@ jobs:
   check_pr:
     runs-on: ubuntu-latest
     steps:
-      # 步驟 1: 檢出 PR 的代碼
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # 步驟 2: 提取學號
       - name: Extract student ID
         id: extract_id
         run: |
@@ -30,20 +28,17 @@ jobs:
           fi
           echo "::set-output name=student_id::$STUDENT_ID"
 
-      # 步驟 3: 設置 Python 環境
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
           python-version: '3.x'
 
-      # 步驟 4: 運行檢查腳本
       - name: Run check script
         id: check
         run: |
-          python scripts/workflow_task1.py ${{ steps.extract_id.outputs.student_id }}
+          python src/scripts/task_flow/check_member_folder.py ${{ steps.extract_id.outputs.student_id }}
         continue-on-error: true
 
-      # 步驟 5: 如果檢查通過，留言「合格」
       - name: Comment on PR - Passed
         if: steps.check.outcome == 'success'
         uses: actions/github-script@v6
@@ -56,7 +51,6 @@ jobs:
               body: '檢查通過：合格'
             });
 
-      # 步驟 6: 如果檢查失敗，留言錯誤信息
       - name: Comment on PR - Failed
         if: steps.check.outcome == 'failure'
         uses: actions/github-script@v6
@@ -67,5 +61,5 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
-              body: '提交不符合：\n' + output
+              body: '提交不符合：\n' + 原因: output
             });

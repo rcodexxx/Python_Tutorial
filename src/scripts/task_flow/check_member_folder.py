@@ -3,7 +3,7 @@ import sys
 import re
 
 
-def check_folder(student_id) -> tuple[bool, list]:
+def check_member_folder(student_id) -> tuple[bool, list]:
     folder_path = f"Class_member/{student_id}"
     error_list = []
 
@@ -57,10 +57,10 @@ if __name__ == "__main__":
         sys.exit(1)
 
     student_id = sys.argv[1]
-    success, errors = check_folder(student_id)
+    success, errors = check_member_folder(student_id)
     if success:
         sys.exit(0)
     else:
         error_message = "\n".join(errors)
-        print(f"::set-output name=errors::{error_message}")
+        print(f"errors::{error_message}")
         sys.exit(1)
