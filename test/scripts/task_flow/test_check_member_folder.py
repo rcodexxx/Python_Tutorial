@@ -1,8 +1,6 @@
-import os
-
 import pytest
 
-from src.scripts.task_flow.check_member_folder import check_member_folder
+from scripts.task_flow.check_member_folder import check_member_folder
 
 
 @pytest.fixture
