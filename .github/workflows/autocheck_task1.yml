@@ -1,0 +1,64 @@
+name: Check Task 1
+
+on:
+  pull_request:
+    types: [opened, reopened]
+  workflow_dispatch:
+
+permissions:
+  pull_requests: write
+  issues: write
+
+jobs:
+  check_pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Extract student ID
+        id: extract_id
+        run: |
+          PR_TITLE="${{ github.event.pull_request.title }}"
+          STUDENT_ID=$(echo "$PR_TITLE" | grep -oP '\b\d{9}\b')
+          if [ -z "$STUDENT_ID" ]; then
+            echo "錯誤：無法從 PR 標題中提取學號"
+            exit 1
+          fi
+          echo "::set-output name=student_id::$STUDENT_ID"
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.x'
+
+      - name: Run check script
+        id: check
+        run: |
+          python src/scripts/task_flow/check_member_folder.py ${{ steps.extract_id.outputs.student_id }}
+        continue-on-error: true
+
+      - name: Comment on PR - Passed
+        if: steps.check.outcome == 'success'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: '檢查通過：合格'
+            });
+
+      - name: Comment on PR - Failed
+        if: steps.check.outcome == 'failure'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const output = `${{ steps.check.outputs.errors }}`;
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: '提交不符合\n' + '原因:' + output
+            });
