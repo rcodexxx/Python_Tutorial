@@ -1,4 +1,4 @@
-from src.OOP.bank_system.BankAccount import BankAccount
+from OOP.bank_system.BankAccount import BankAccount
 
 class SavingsAccount(BankAccount):
     def __init__(self, owner, balance=0, interest_rate=0.01):
