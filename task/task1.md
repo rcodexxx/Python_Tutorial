@@ -54,15 +54,19 @@ cart = [
 print(calculate_total(cart))
 print(calculate_total(cart, "VIP"))
 
-cart2 = [("backpack", 800, 2), ("bottle", 250, 2)]
+cart2 = [
+    ("backpack", 800, 2), 
+    ("bottle", 250, 2)
+]
+
 print(calculate_total(cart2))
 print(calculate_total(cart2, "NEW100"))
 ```
 
 **期望輸出：**
 ```
-300
-285.0
+350
+332.5
 1785.0
 1685.0
 ```
@@ -79,7 +83,7 @@ records 是一個 list，每個元素是一個 tuple，包含 (書名, 借閱者
 
 **範例輸入：**
 ```python
-pythonrecords = [
+records = [
     ("Python Basics", "Alice", 14),
     ("Data Structures", "Bob", 28),
     ("Python Basics", "Charlie", 35),
@@ -100,7 +104,7 @@ print(result)
 ```python
 {
     "popular_books": [("Python Basics", 4), ("Data Structures", 3), ("Algorithms", 2)],
-    "active_readers": [("Alice", 80), ("Bob", 61), ("Charlie", 50)],
+    "active_readers": [("Alice", 80), ("Bob", 61), ("David", 54)],
     "overdue_count": 4
 }
 ```
