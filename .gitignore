@@ -100,3 +100,5 @@ env/
 .vscode/
 .idea/
 
+task_solv/
+
