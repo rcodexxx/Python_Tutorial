@@ -28,7 +28,3 @@
 
 #### Resource
 - iclass
-
-## Homework
-- Task 1: 新增自己的基本資料的到Class member資料夾 [detail](/task/task%201)
-- Task 2: 根據題目要求, 新增Shape和ShapeFactory物件 [detail](/task/task%202)
